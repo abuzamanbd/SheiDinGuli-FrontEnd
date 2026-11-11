@@ -1,0 +1,13 @@
+@use '../abstracts' as *;
+
+// Profile settings (signed-in). Field styles are shared with the onboarding modal (.c-ob__*).
+.p-profile {
+  min-height: 100vh;
+
+  &__top { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 28px; background: #fff; border-bottom: 1px solid #e3e8e6; @include down($bp-sm) { padding: 12px 16px; } }
+  &__back { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: var(--color-heading); svg { transform: rotate(90deg); } &:hover { color: var(--color-accent); } }
+  &__main { max-width: 720px; margin: 0 auto; padding: 28px 16px 56px; display: flex; flex-direction: column; gap: 18px; h1 { margin: 0; font-family: var(--font-heading); font-weight: 400; font-size: 30px; color: var(--color-heading); } }
+  &__sub { margin: -10px 0 0; color: var(--color-text-muted); }
+  &__card { display: flex; flex-direction: column; gap: 18px; padding: 22px 24px; border: 1px solid #e3e8e6; border-radius: 18px; background: #fff; h2 { margin: 0; font-size: 18px; color: var(--color-heading); } b { color: var(--color-accent); } }
+  &__foot { display: flex; justify-content: flex-end; }
+}

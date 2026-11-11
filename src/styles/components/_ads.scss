@@ -1,0 +1,29 @@
+@use '../abstracts' as *;
+
+// Ad slot. Real ads are injected inside; placeholders only show while designing.
+.c-ad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 100%;
+  min-height: 90px;
+  padding: 12px;
+  border: 1.5px dashed var(--color-border);
+  border-radius: 14px;
+  background: repeating-linear-gradient(135deg, transparent 0 10px, color-mix(in srgb, var(--color-border) 40%, transparent) 10px 11px);
+  color: var(--color-text-muted);
+  font-size: 13px;
+  text-align: center;
+
+  &__label { font-weight: 700; letter-spacing: .08em; font-size: 11px; }
+  &__size { font-size: 12px; opacity: .8; }
+
+  &--banner { min-height: 90px; }
+  &--box { min-height: 250px; }
+  &--tall { min-height: 300px; }
+  &--inline { margin: 1.6em 0; min-height: 120px; }
+}
+
+.l-ad-row { padding-top: 20px; }

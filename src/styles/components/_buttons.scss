@@ -1,0 +1,78 @@
+@use '../abstracts' as *;
+
+.c-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 46px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: var(--size-radius-button);
+  background: var(--color-button-bg);
+  color: var(--color-button-text);
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  transition: background-color .22s ease, color .22s ease, box-shadow .22s ease, border-color .22s ease;
+  @include focus-ring;
+
+  &:hover {
+    background: var(--color-button-hover-bg);
+    color: var(--color-button-text);
+    box-shadow: 0 10px 22px -10px color-mix(in srgb, var(--color-button-hover-bg) 70%, transparent);
+  }
+
+  &--sm { height: 28px; padding: 0 12px; font-size: 12px; }
+  &--lg { height: 52px; font-size: 16px; width: 100%; }
+
+  &--white {
+    background: #fff;
+    color: var(--color-primary);
+    &:hover { background: var(--color-accent); color: #fff; }
+  }
+
+  &--accent {
+    background: var(--color-topbar-cta-bg);
+    color: var(--color-topbar-cta-text);
+    &:hover { background: var(--color-accent); color: #fff; }
+  }
+
+  &--outline {
+    background: var(--color-surface);
+    color: var(--color-heading);
+    border: 1px solid var(--color-border);
+    font-weight: 600;
+    &:hover { background: var(--color-surface); color: var(--color-accent); border-color: var(--color-accent); box-shadow: none; }
+  }
+}
+
+// Round icon-only button (search, bookmark, share...)
+.c-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-heading);
+  transition: all .2s ease;
+  @include focus-ring;
+
+  &:hover { border-color: var(--color-accent); color: var(--color-accent); background: var(--color-accent-soft); }
+  &.is-active { border-color: var(--color-accent); color: var(--color-accent); background: var(--color-accent-soft); }
+
+  &--ghost-light {
+    background: rgb(255 255 255 / 10%);
+    border-color: rgb(255 255 255 / 30%);
+    color: #fff;
+    &:hover { background: rgb(255 255 255 / 22%); color: #fff; border-color: #fff; }
+  }
+}
+
+.c-link-more {
+  font-weight: 700;
+  font-size: 15px;
+}

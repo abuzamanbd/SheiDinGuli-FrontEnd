@@ -1,0 +1,59 @@
+@use '../../abstracts' as *;
+
+// Article body themes. The author picks one; the page sets data-article-theme="<key>" on .c-prose-wrap.
+// Each theme only changes reading style (type, spacing, quote, colours) — never the site chrome.
+
+.c-prose { font-size: calc(var(--prose-size, 19px)); line-height: 2; color: var(--color-text);
+  p { margin: 0 0 1.2em; }
+  h2, h3 { margin: 1.6em 0 .6em; font-family: var(--font-heading); font-weight: 400; color: var(--color-heading); line-height: 1.4; }
+  blockquote { margin: 1.6em 0; }
+  img { max-width: 100%; border-radius: 14px; }
+  a { color: var(--color-accent); text-decoration: underline; }
+}
+.c-prose-wrap { max-width: 720px; margin: 0 auto; }
+
+// ---- classic: warm book-like, drop cap
+[data-article-theme='classic'] .c-prose {
+  font-family: var(--font-body);
+  .c-prose__part:first-child p:first-of-type::first-letter { float: left; margin: 6px 12px 0 0; font-family: var(--font-heading); font-size: 4em; line-height: .85; color: var(--color-accent); }
+  blockquote { padding: 12px 0 12px 24px; border-left: 4px solid var(--color-accent); font-family: var(--font-heading); font-size: 1.15em; color: var(--color-heading); }
+}
+
+// ---- modern: clean sans, wider spacing, highlighted quote card
+[data-article-theme='modern'] .c-prose {
+  font-family: var(--font-body);
+  line-height: 1.9;
+  h2, h3 { font-family: var(--font-body); font-weight: 700; }
+  blockquote { padding: 20px 24px; border-radius: 16px; background: var(--color-story-tint); font-weight: 600; color: var(--color-primary); }
+}
+
+// ---- poetry: centered, airy, serif
+[data-article-theme='poetry'] .c-prose-wrap { max-width: 560px; }
+[data-article-theme='poetry'] .c-prose {
+  font-family: var(--font-heading);
+  text-align: center;
+  line-height: 2.2;
+  font-size: calc(var(--prose-size, 19px) + 2px);
+  p { margin-bottom: 2em; }
+  blockquote { padding: 0 12px; font-style: italic; color: var(--color-accent); &::before, &::after { content: "❝"; display: block; font-size: 1.6em; opacity: .5; } &::after { content: "❞"; } }
+}
+
+// ---- nostalgia: sepia paper, soft frame
+[data-article-theme='nostalgia'] .c-prose-wrap { padding: 32px 36px; border-radius: 20px; background: #fbf3e4; box-shadow: inset 0 0 0 1px #ead9b8; @include down($bp-sm) { padding: 20px; } }
+[data-article-theme='nostalgia'] .c-prose {
+  font-family: var(--font-heading);
+  color: #4a3a22;
+  .c-prose__part:first-child p:first-of-type::first-letter { font-size: 2.4em; color: #a0651b; }
+  h2, h3 { color: #6b4a1f; }
+  blockquote { padding: 14px 20px; border: 1px dashed #c9a96a; border-radius: 12px; background: #f6e9cd; font-style: italic; color: #6b4a1f; }
+}
+
+// ---- night: dark reading mode
+[data-article-theme='night'] .c-prose-wrap { padding: 36px; border-radius: 20px; background: #12201b; @include down($bp-sm) { padding: 20px; } }
+[data-article-theme='night'] .c-prose {
+  font-family: var(--font-body);
+  color: #d7e4de;
+  h2, h3 { color: #fff; }
+  a { color: #ff7a8a; }
+  blockquote { padding: 12px 22px; border-left: 4px solid #ff7a8a; color: #fff; background: rgb(255 255 255 / 6%); border-radius: 0 12px 12px 0; }
+}
