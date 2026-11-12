@@ -9,7 +9,7 @@ import { decodeSession, encodeSession } from '@/lib/auth/cookies';
  */
 const ALLOWED = [
   /^posts(\/|$)/, /^review(\/|$)/, /^users\/me(\/|$)/,
-  /^roles(\/|$)/, /^users\/staff(\/|$)/, /^users\/[0-9a-fA-F-]{36}\/(roles|suspend|activate)$/
+  /^notifications(\/|$)/, /^roles(\/|$)/, /^users\/staff(\/|$)/, /^users\/[0-9a-fA-F-]{36}\/(roles|suspend|activate)$/
 ];
 
 async function forward(request: NextRequest, ctx: { params: Promise<{ path: string[] }> }) {

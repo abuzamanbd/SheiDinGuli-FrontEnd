@@ -30,3 +30,5 @@
 }
 .p-admin__pill.is-green { background: #e6f2ee; color: #00563f; }
 .p-admin__pill.is-grey { background: #eef2f0; color: #4e5a56; }
+
+.p-panel__bar { display: flex; justify-content: flex-end; margin: -10px 0 -6px; color: var(--color-heading); }

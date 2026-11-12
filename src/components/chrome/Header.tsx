@@ -7,6 +7,7 @@ import { Icon } from '../Icon';
 import { Logo } from '../Logo';
 import { useAuthModal } from '../auth/AuthModal';
 import { UserMenu } from './UserMenu';
+import { NotificationBell } from '../notifications/NotificationBell';
 import { initialOf } from '@/lib/bn';
 
 export function Header({ settings, menu }: { settings: SiteSettings; menu: MenuNode[] }) {
@@ -55,7 +56,7 @@ export function Header({ settings, menu }: { settings: SiteSettings; menu: MenuN
         </nav>
         <div className="s-header__tools">
           <button type="button" className="c-icon-btn s-header__search" aria-label="খুঁজুন"><Icon name="search" /></button>
-          {auth.user ? <UserMenu /> : <button type="button" className="c-btn s-header__login" onClick={() => auth.open('login')}>লগইন / নিবন্ধন</button>}
+          {auth.user ? <><NotificationBell /><UserMenu /></> : <button type="button" className="c-btn s-header__login" onClick={() => auth.open('login')}>লগইন / নিবন্ধন</button>}
           <button type="button" className="c-icon-btn s-header__burger" aria-label="মেনু খুলুন" onClick={() => setDrawer(true)}><Icon name="menu" /></button>
         </div>
 

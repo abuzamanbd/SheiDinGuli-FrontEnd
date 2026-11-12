@@ -11,3 +11,13 @@
   &__card { display: flex; flex-direction: column; gap: 18px; padding: 22px 24px; border: 1px solid #e3e8e6; border-radius: 18px; background: #fff; h2 { margin: 0; font-size: 18px; color: var(--color-heading); } b { color: var(--color-accent); } }
   &__foot { display: flex; justify-content: flex-end; }
 }
+
+.p-profile {
+  &__row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; @include down($bp-sm) { grid-template-columns: 1fr; } }
+  &__note { margin: 0; font-size: 13px; font-weight: 400; color: var(--color-text-muted); }
+  h2 &__note { margin-left: 8px; }
+  &__preview { display: flex; flex-direction: column; gap: 2px; padding: 16px 18px; border-radius: 14px; background: #f6f8f7; small { color: var(--color-text-muted); } b { font-size: 17px; color: var(--color-heading); } span { color: var(--color-text-muted); font-size: 14px; } p { margin: 6px 0 0; } a { margin-top: 8px; font-weight: 600; } }
+  &__soon { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; li { display: flex; flex-direction: column; padding: 12px 14px; border: 1px dashed #cdd6d2; border-radius: 12px; color: var(--color-text-muted); b { color: var(--color-heading); } } }
+  &__card.is-soon { opacity: .85; }
+  &__prefs { th[scope='row'] { text-align: left; font-weight: 400; } td, thead th:not(:first-child) { text-align: center; } }
+}

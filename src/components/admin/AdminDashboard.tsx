@@ -10,6 +10,7 @@ import type { AdminRoleId } from '@/lib/auth/roles';
 import type { QueueName, QueuePage, ReviewItem } from '@/lib/admin/types';
 import { Icon, type IconName } from '../Icon';
 import { AccessPanel } from './AccessPanel';
+import { NotificationBell } from '../notifications/NotificationBell';
 
 interface Props { roleId: AdminRoleId; displayName: string; username: string }
 
@@ -120,6 +121,7 @@ export function AdminDashboard({ roleId, displayName, username }: Props) {
       <div className="p-admin__main">
         <header className="p-admin__top">
           <span className="p-admin__user"><span className="p-admin__initial" style={{ background: role.color }}>{displayName.slice(0, 1)}</span><span className="p-admin__who"><b>{displayName}</b><small>@{username} · {role.label}</small></span></span>
+          <NotificationBell />
         </header>
         <main className="p-admin__content">
           <div className="p-admin__hello">

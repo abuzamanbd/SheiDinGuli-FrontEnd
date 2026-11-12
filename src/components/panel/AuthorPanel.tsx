@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { bff } from '@/lib/bff';
 import { timeAgoBn, toBn, formatCount } from '@/lib/bn';
 import { STATUS_LABEL, type Dashboard, type PostsPage } from '@/lib/posts/api';
+import { NotificationBell } from '../notifications/NotificationBell';
 import { Icon } from '../Icon';
 
 const FILTERS: [string, string][] = [['', 'সব'], ['published', 'প্রকাশিত'], ['review', 'পর্যালোচনায়'], ['changes', 'সংশোধন'], ['draft', 'খসড়া']];
@@ -48,6 +49,7 @@ export function AuthorPanel({ displayName, username, staff }: { displayName: str
       </aside>
 
       <main className="p-panel__main">
+        <div className="p-panel__bar"><NotificationBell /></div>
         <div className="p-panel__hello">
           <div><h1>স্বাগতম, {displayName.split(' ')[0]}</h1><p>{summary || 'আজ কী লিখবেন? একটি নতুন লেখা শুরু করুন।'}</p></div>
           <Link href={`/author/${username}`} className="c-btn c-btn--ghost">পাবলিক প্রোফাইল</Link>
