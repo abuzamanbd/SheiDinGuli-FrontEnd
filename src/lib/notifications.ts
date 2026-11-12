@@ -9,5 +9,7 @@ export const NOTIFICATION_TONE: Record<string, { label: string; tone: 'green' | 
   new_follower: { label: 'অনুসারী', tone: 'green' },
   new_comment: { label: 'মন্তব্য', tone: 'green' },
   comment_reply: { label: 'উত্তর', tone: 'green' },
-  comment_removed: { label: 'সরানো', tone: 'red' }
+  comment_removed: { label: 'সরানো', tone: 'red' },
+  post_hidden: { label: 'সরানো', tone: 'red' },
+  post_restored: { label: 'ফিরেছে', tone: 'green' }
 };

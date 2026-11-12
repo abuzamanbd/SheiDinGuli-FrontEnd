@@ -9,6 +9,7 @@ import { highlightHtml } from '@/lib/admin/highlight';
 import type { AdminRoleId } from '@/lib/auth/roles';
 import type { QueueName, QueuePage, ReviewItem } from '@/lib/admin/types';
 import { Icon, type IconName } from '../Icon';
+import { PublishedPosts } from './PublishedPosts';
 import { HeldComments } from '../social/HeldComments';
 import { AccessPanel } from './AccessPanel';
 import { NotificationBell } from '../notifications/NotificationBell';
@@ -38,6 +39,8 @@ const MENU_BY_ROLE: Record<AdminRoleId, MenuKey[]> = {
   policy: ['dash', 'flag', 'words', 'report'],
   other: ['dash']
 };
+/** Roles that hold the posts.unpublish permission (hide / show posts on the site). */
+const CAN_UNPUBLISH: AdminRoleId[] = ['super', 'editor'];
 const CAN_REVIEW: AdminRoleId[] = ['super', 'editor', 'reviewer', 'policy'];
 const TABS: [QueueName, string][] = [['Pending', 'নতুন'], ['Flagged', 'চিহ্নিত'], ['Escalated', 'উচ্চ পর্যায়ে'], ['ReReview', 'পুনরায় যাচাই']];
 const greeting = (h: number) => (h < 5 ? 'শুভ রাত্রি' : h < 12 ? 'শুভ সকাল' : h < 15 ? 'শুভ দুপুর' : h < 18 ? 'শুভ বিকাল' : h < 20 ? 'শুভ সন্ধ্যা' : 'শুভ রাত্রি');
@@ -51,7 +54,7 @@ export function AdminDashboard({ roleId, displayName, username }: Props) {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [loading, setLoading] = useState(canReview);
   const [openTask, setOpenTask] = useState<string | null>(null);
-  const [view, setView] = useState<'dash' | 'users' | 'comments'>('dash');
+  const [view, setView] = useState<'dash' | 'users' | 'comments' | 'posts'>('dash');
   const [now, setNow] = useState<{ greet: string; date: string } | null>(null);
 
   useEffect(() => {
@@ -86,10 +89,10 @@ export function AdminDashboard({ roleId, displayName, username }: Props) {
 
   async function logout() { await fetch('/api/auth/logout', { method: 'POST' }); router.push('/'); router.refresh(); }
   const menu = MENU_BY_ROLE[roleId];
-  const soon = (k: MenuKey) => !['dash', 'queue', 'flag', 'users'].includes(k) && !(k === 'report' && canReview);
-  const activeKey: MenuKey = view === 'users' ? 'users' : view === 'comments' ? 'report' : 'dash';
+  const soon = (k: MenuKey) => !['dash', 'queue', 'flag', 'users'].includes(k) && !(k === 'report' && canReview) && !(k === 'posts' && CAN_UNPUBLISH.includes(roleId));
+  const activeKey: MenuKey = view === 'users' ? 'users' : view === 'comments' ? 'report' : view === 'posts' ? 'posts' : 'dash';
   const goMenu = (k: MenuKey) => {
-    setView(k === 'users' ? 'users' : k === 'report' ? 'comments' : 'dash');
+    setView(k === 'users' ? 'users' : k === 'report' ? 'comments' : k === 'posts' ? 'posts' : 'dash');
     if (k === 'queue') setTab('Pending');
     if (k === 'flag') setTab('Flagged');
   };
@@ -130,7 +133,7 @@ export function AdminDashboard({ roleId, displayName, username }: Props) {
             {now && <span className="p-admin__date">{now.date}</span>}
           </div>
 
-          {view === 'users' ? <AccessPanel selfUsername={username} /> : view === 'comments' ? <HeldComments /> : <>
+          {view === 'users' ? <AccessPanel selfUsername={username} /> : view === 'comments' ? <HeldComments /> : view === 'posts' ? <PublishedPosts /> : <>
           <div className="p-admin__stats">
             {stats.map((s) => (
               <div key={s.label} className={`p-admin__stat is-${s.tone}`}>

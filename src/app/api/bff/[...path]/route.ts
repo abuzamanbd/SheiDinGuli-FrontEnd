@@ -10,7 +10,7 @@ import { refreshSession } from '@/lib/auth/refresh';
  */
 const ALLOWED = [
   /^posts(\/|$)/, /^review(\/|$)/, /^users\/me(\/|$)/,
-  /^notifications(\/|$)/, /^public\//, /^social(\/|$)/, /^roles(\/|$)/, /^users\/staff(\/|$)/, /^users\/[0-9a-fA-F-]{36}\/(roles|suspend|activate)$/
+  /^notifications(\/|$)/, /^public\//, /^social(\/|$)/, /^admin\/posts(\/|$)/, /^roles(\/|$)/, /^users\/staff(\/|$)/, /^users\/[0-9a-fA-F-]{36}\/(roles|suspend|activate)$/
 ];
 
 /** These work without signing in (a signed-in caller just gets more: their own held comments, their like state). */

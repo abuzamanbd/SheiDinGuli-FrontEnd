@@ -12,7 +12,10 @@ import { ViewTracker } from '@/components/social/ViewTracker';
 import { AuthorBox, PrevNext, ReportLink } from '@/components/article/ArticleExtras';
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+  // Next hands over the path still percent-encoded, and Bengali slugs are common.
+  const { slug: rawSlug } = await params;
+  let slug = rawSlug;
+  try { slug = decodeURIComponent(rawSlug); } catch { /* keep as is */ }
   const post = await api.getPost(slug);
   if (!post) notFound();
   const [author, related] = await Promise.all([api.getAuthor(post.authorUsername), api.getRelatedPosts(slug, 3)]);

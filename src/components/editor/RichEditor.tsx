@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { EditorContent, useEditor, type Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import TextAlign from '@tiptap/extension-text-align';
@@ -114,7 +114,7 @@ function Toolbar({ editor, font, size, poemMode, onFont, onSize, onPoem, panel, 
         {btn('কাটা দাগ', editor.isActive('strike'), () => editor.chain().focus().toggleStrike().run(), <s>S</s>)}
         <span className="c-editor__sep" aria-hidden="true" />
         <div className="c-editor__aligns" role="group" aria-label="সারিবদ্ধতা">
-          {aligns.map((a) => btn(a.label, editor.isActive({ textAlign: a.id }), () => editor.chain().focus().setTextAlign(a.id).run(), icon(a.icon), ' c-tb--align'))}
+          {aligns.map((a) => <Fragment key={a.id}>{btn(a.label, editor.isActive({ textAlign: a.id }), () => editor.chain().focus().setTextAlign(a.id).run(), icon(a.icon), ' c-tb--align')}</Fragment>)}
         </div>
         <span className="c-editor__sep" aria-hidden="true" />
         {btn('বুলেট তালিকা', editor.isActive('bulletList'), () => editor.chain().focus().toggleBulletList().run(), icon('list'))}
