@@ -1,6 +1,6 @@
 import { mockApi } from './mock';
 import {
-  USE_MOCK, getAuthorFromApi, getAuthorPostsFromApi, getPostFromApi, getPostsForSourceFromApi, getRelatedFromApi
+  USE_MOCK, getAuthorFromApi, getAuthorPostsFromApi, getMenuFromApi, getPostFromApi, getPostsForSourceFromApi, getRelatedFromApi
 } from './http';
 import type { SiteApi } from './types';
 
@@ -11,6 +11,9 @@ import type { SiteApi } from './types';
  */
 export const api: SiteApi = {
   ...mockApi,
+  async getMenu() {
+    return (await getMenuFromApi()) ?? mockApi.getMenu();
+  },
   async getAuthor(username) {
     return (await getAuthorFromApi(username)) ?? mockApi.getAuthor(username);
   },
