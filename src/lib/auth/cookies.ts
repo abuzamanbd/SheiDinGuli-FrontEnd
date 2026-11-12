@@ -7,6 +7,12 @@ export interface CookieEntry {
   options: { httpOnly: true; sameSite: 'lax'; secure: boolean; path: string; expires: Date };
 }
 
+/**
+ * Cookie rules: httpOnly (scripts cannot read them), SameSite=Lax, Secure on https, site-wide path, and a real
+ * expiry date so they survive closing the browser. The refresh and session cookies last as long as the API's
+ * refresh token (60 days, renewed on every refresh = "stay signed in until you log out"). The access cookie is
+ * short on purpose; the proxy and the BFF swap it for a fresh one using the refresh cookie.
+ */
 const opts = (expires: Date): CookieEntry['options'] => ({
   httpOnly: true,
   sameSite: 'lax',
