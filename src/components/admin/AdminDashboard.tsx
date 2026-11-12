@@ -9,6 +9,7 @@ import { highlightHtml } from '@/lib/admin/highlight';
 import type { AdminRoleId } from '@/lib/auth/roles';
 import type { QueueName, QueuePage, ReviewItem } from '@/lib/admin/types';
 import { Icon, type IconName } from '../Icon';
+import { HeldComments } from '../social/HeldComments';
 import { AccessPanel } from './AccessPanel';
 import { NotificationBell } from '../notifications/NotificationBell';
 
@@ -27,7 +28,7 @@ type MenuKey = 'dash' | 'queue' | 'flag' | 'posts' | 'authors' | 'cat' | 'words'
 const MENU: Record<MenuKey, [string, IconName]> = {
   dash: ['ড্যাশবোর্ড', 'grid'], queue: ['পর্যালোচনা সারি', 'list'], flag: ['চিহ্নিত লেখা', 'flag'], posts: ['সব লেখা', 'book'],
   authors: ['লেখক', 'user'], cat: ['ধরন ও উপধরন', 'grid'], words: ['নীতিমালা শব্দ তালিকা', 'list'], home: ['হোমপেজ সাজানো', 'home'],
-  users: ['অ্যাডমিন ও ভূমিকা', 'users'], report: ['অভিযোগ ও রিপোর্ট', 'info'], gear: ['সেটিংস', 'palette']
+  users: ['অ্যাডমিন ও ভূমিকা', 'users'], report: ['অভিযোগ ও মন্তব্য', 'info'], gear: ['সেটিংস', 'palette']
 };
 const MENU_BY_ROLE: Record<AdminRoleId, MenuKey[]> = {
   super: ['dash', 'queue', 'flag', 'posts', 'authors', 'cat', 'words', 'home', 'users', 'report', 'gear'],
@@ -50,7 +51,7 @@ export function AdminDashboard({ roleId, displayName, username }: Props) {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [loading, setLoading] = useState(canReview);
   const [openTask, setOpenTask] = useState<string | null>(null);
-  const [view, setView] = useState<'dash' | 'users'>('dash');
+  const [view, setView] = useState<'dash' | 'users' | 'comments'>('dash');
   const [now, setNow] = useState<{ greet: string; date: string } | null>(null);
 
   useEffect(() => {
@@ -85,10 +86,10 @@ export function AdminDashboard({ roleId, displayName, username }: Props) {
 
   async function logout() { await fetch('/api/auth/logout', { method: 'POST' }); router.push('/'); router.refresh(); }
   const menu = MENU_BY_ROLE[roleId];
-  const soon = (k: MenuKey) => !['dash', 'queue', 'flag', 'users'].includes(k);
-  const activeKey: MenuKey = view === 'users' ? 'users' : 'dash';
+  const soon = (k: MenuKey) => !['dash', 'queue', 'flag', 'users'].includes(k) && !(k === 'report' && canReview);
+  const activeKey: MenuKey = view === 'users' ? 'users' : view === 'comments' ? 'report' : 'dash';
   const goMenu = (k: MenuKey) => {
-    setView(k === 'users' ? 'users' : 'dash');
+    setView(k === 'users' ? 'users' : k === 'report' ? 'comments' : 'dash');
     if (k === 'queue') setTab('Pending');
     if (k === 'flag') setTab('Flagged');
   };
@@ -129,7 +130,7 @@ export function AdminDashboard({ roleId, displayName, username }: Props) {
             {now && <span className="p-admin__date">{now.date}</span>}
           </div>
 
-          {view === 'users' ? <AccessPanel selfUsername={username} /> : <>
+          {view === 'users' ? <AccessPanel selfUsername={username} /> : view === 'comments' ? <HeldComments /> : <>
           <div className="p-admin__stats">
             {stats.map((s) => (
               <div key={s.label} className={`p-admin__stat is-${s.tone}`}>

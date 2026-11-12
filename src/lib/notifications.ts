@@ -5,5 +5,9 @@ export interface NotificationPage { items: NotificationItem[]; total: number; un
 export const NOTIFICATION_TONE: Record<string, { label: string; tone: 'green' | 'red' | 'amber' | 'grey' }> = {
   post_published: { label: 'প্রকাশিত', tone: 'green' },
   changes_requested: { label: 'সংশোধন', tone: 'amber' },
-  post_rejected: { label: 'বাতিল', tone: 'red' }
+  post_rejected: { label: 'বাতিল', tone: 'red' },
+  new_follower: { label: 'অনুসারী', tone: 'green' },
+  new_comment: { label: 'মন্তব্য', tone: 'green' },
+  comment_reply: { label: 'উত্তর', tone: 'green' },
+  comment_removed: { label: 'সরানো', tone: 'red' }
 };

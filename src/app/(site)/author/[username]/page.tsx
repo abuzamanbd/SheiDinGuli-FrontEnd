@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { api } from '@/lib/api';
 import { toBn } from '@/lib/bn';
+import { FollowButton } from '@/components/social/FollowButton';
 import { AdSlot } from '@/components/AdSlot';
 import { Avatar } from '@/components/cards/Parts';
 import { Icon } from '@/components/Icon';
@@ -27,7 +28,7 @@ export default async function AuthorPage({ params }: { params: Promise<{ usernam
             <span className="p-author__handle">@{author.username}</span>
             <p className="p-author__bio">{author.bio}</p>
           </div>
-          <div className="p-author__actions"><button type="button" className="c-btn">অনুসরণ করুন</button></div>
+          <div className="p-author__actions"><FollowButton username={author.username} /></div>
           <div className="p-author__counts">
             <span><b>{toBn(author.counts.total)}</b> লেখা</span>
             <span><b>{toBn(author.counts.story)}</b> গল্প</span>

@@ -7,6 +7,8 @@ import { Avatar, Stats } from '@/components/cards/Parts';
 import { PostCard } from '@/components/cards/Cards';
 import { SectionHead } from '@/components/sections/SectionHead';
 import { ArticleReader } from '@/components/article/ArticleReader';
+import { Comments } from '@/components/social/Comments';
+import { ViewTracker } from '@/components/social/ViewTracker';
 import { AuthorBox, PrevNext, ReportLink } from '@/components/article/ArticleExtras';
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -20,6 +22,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
   return (
     <article className={`p-article is-${post.kind}`} data-section="post.article">
+      <ViewTracker slug={post.slug} />
       <div className="p-article__progress"><span /></div>
       <div className="l-wrap l-wrap--read">
         <nav className="p-article__crumbs" aria-label="পথ">
@@ -43,14 +46,14 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       <div className="l-wrap l-wrap--read l-ad-row"><AdSlot slot="post.top" shape="banner" /></div>
 
       <div className="l-wrap l-wrap--read">
-        <ArticleReader theme={post.articleTheme} parts={parts} likes={post.likes} adSlot={<AdSlot slot="post.inarticle" shape="inline" />} />
+        <ArticleReader theme={post.articleTheme} parts={parts} likes={post.likes} postId={post.id} adSlot={<AdSlot slot="post.inarticle" shape="inline" />} />
         <div className="p-article__tags">
           <div>{post.tags.map((t) => <Link key={t} href={`/topic/${encodeURIComponent(t)}`} className="c-chip">{t}</Link>)}</div>
           <ReportLink />
         </div>
         <AuthorBox post={post} author={author} />
         <PrevNext post={post} />
-        <div className="p-article__comments" data-section="post.comments">মন্তব্য বিভাগ শীঘ্রই আসছে</div>
+        <Comments postId={post.id} enabled={post.commentsEnabled !== false} />
         <div className="l-ad-row"><AdSlot slot="post.bottom" shape="banner" /></div>
       </div>
 

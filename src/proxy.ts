@@ -1,23 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { callBackend } from '@/lib/auth/backend';
+import { refreshSession as refresh } from '@/lib/auth/refresh';
 import { ALL_COOKIE_NAMES, authCookies } from '@/lib/auth/cookies';
 import { COOKIE } from '@/lib/auth/config';
-import type { AuthResult } from '@/lib/auth/types';
-
-// Several requests (page + prefetches) can arrive together with the same expired access cookie.
-// Share one refresh call between them, otherwise the second one would use an already-rotated token.
-const inflight = new Map<string, Promise<{ status: number; data: AuthResult | null }>>();
-
-function refresh(token: string) {
-  let p = inflight.get(token);
-  if (!p) {
-    p = callBackend<AuthResult>('auth/refresh', { refreshToken: token })
-      .then((r) => ({ status: r.status, data: r.ok ? r.data : null }))
-      .finally(() => setTimeout(() => inflight.delete(token), 5000));
-    inflight.set(token, p);
-  }
-  return p;
-}
 
 /** Keeps the user signed in: when the short-lived access cookie has expired, get a new one with the refresh cookie. */
 export async function proxy(request: NextRequest) {

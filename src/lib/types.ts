@@ -29,6 +29,8 @@ export interface PostFullData extends PostCardData {
   /** Article theme the author picked (see styles/themes/article). */
   articleTheme: ArticleThemeKey;
   featured?: boolean;
+  /** False when the author turned comments off. */
+  commentsEnabled?: boolean;
   prev?: { title: string; slug: string };
   next?: { title: string; slug: string };
 }

@@ -4,13 +4,19 @@ import { useEffect, useState, type ReactNode } from 'react';
 import type { ArticleThemeKey } from '@/lib/types';
 import { Icon } from '../Icon';
 import { toBn, formatCountShort } from '@/lib/bn';
+import { bff } from '@/lib/bff';
+import { isRealId, type SocialState } from '@/lib/social';
+import { useAuthModal } from '../auth/AuthModal';
 
 const MIN = 16, MAX = 26;
 
 /** Reading progress bar + font size control + like/bookmark, plus the themed article body. */
-export function ArticleReader({ theme, parts, adSlot, likes, adAfter = 3 }: {
-  theme: ArticleThemeKey; parts: string[]; adSlot?: ReactNode; likes: number; adAfter?: number;
+export function ArticleReader({ theme, parts, adSlot, likes, postId, adAfter = 3 }: {
+  theme: ArticleThemeKey; parts: string[]; adSlot?: ReactNode; likes: number; postId?: string; adAfter?: number;
 }) {
+  const { user, open } = useAuthModal();
+  const real = !!postId && isRealId(postId);
+  const [count, setCount] = useState(likes);
   const [size, setSize] = useState(19);
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -27,6 +33,24 @@ export function ArticleReader({ theme, parts, adSlot, likes, adAfter = 3 }: {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Real posts: whether this reader already liked it, and the live count.
+  useEffect(() => {
+    if (!real) return;
+    let alive = true;
+    void bff<SocialState>('GET', `social/state?postId=${postId}`).then((r) => { if (alive && r.data) { setLiked(r.data.liked); setCount(r.data.likes); } });
+    return () => { alive = false; };
+  }, [real, postId, user?.id]);
+
+  async function toggleLike() {
+    if (!real) { setLiked(!liked); return; }
+    if (!user) { open('login'); return; }
+    const next = !liked;
+    setLiked(next); setCount((c) => Math.max(0, c + (next ? 1 : -1)));
+    const r = await bff<SocialState>(next ? 'PUT' : 'DELETE', `social/posts/${postId}/like`);
+    if (r.data) { setLiked(r.data.liked); setCount(r.data.likes); }
+    else { setLiked(!next); setCount((c) => Math.max(0, c + (next ? -1 : 1))); }
+  }
+
   useEffect(() => { document.documentElement.style.setProperty('--progress', `${progress}%`); }, [progress]);
   useEffect(() => () => { document.documentElement.style.removeProperty('--progress'); }, []);
 
@@ -39,8 +63,8 @@ export function ArticleReader({ theme, parts, adSlot, likes, adAfter = 3 }: {
             <span />
             <button type="button" onClick={() => setSize((s) => Math.min(MAX, s + 1))} aria-label="বড় করুন">অ+</button>
           </div>
-          <button type="button" className={`c-icon-btn p-article__like${liked ? ' is-active' : ''}`} aria-pressed={liked} onClick={() => setLiked(!liked)}>
-            <Icon name="heart" />{formatCountShort(likes + (liked ? 1 : 0))}
+          <button type="button" className={`c-icon-btn p-article__like${liked ? ' is-active' : ''}`} aria-pressed={liked} onClick={toggleLike}>
+            <Icon name="heart" />{formatCountShort(real ? count : likes + (liked ? 1 : 0))}
           </button>
           <button type="button" className={`c-icon-btn${saved ? ' is-active' : ''}`} aria-pressed={saved} aria-label="সংরক্ষণ" onClick={() => setSaved(!saved)}><Icon name="bookmark" /></button>
           <button type="button" className="c-icon-btn" aria-label="শেয়ার" onClick={() => navigator.clipboard?.writeText(window.location.href)}><Icon name="share" /></button>
